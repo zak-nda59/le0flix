@@ -8,6 +8,7 @@ out/
 # builds
 /dist/
 /build/
+backend/dist/
 
 # env
 .env
