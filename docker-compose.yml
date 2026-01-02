@@ -1,0 +1,32 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: le0flix-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: le0flix
+      MYSQL_USER: le0flix
+      MYSQL_PASSWORD: le0flix
+    ports:
+      - "3306:3306"
+    volumes:
+      - le0flix_mysql_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: le0flix-phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8081:80"
+
+volumes:
+  le0flix_mysql_data:
