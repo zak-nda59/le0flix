@@ -2,12 +2,33 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { type FormEvent, useState } from "react";
+import { Suspense, type FormEvent, useState } from "react";
 import { apiJson } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import type { AuthResponse } from "@/lib/types";
 
 export default function RegisterPage() {
+    return (
+        <Suspense
+            fallback={
+                <div className="min-h-screen bg-black text-white">
+                    <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6">
+                        <Link href="/" className="mb-10 text-2xl font-semibold tracking-tight">
+                            Le0flix
+                        </Link>
+                        <div className="rounded-md border border-white/10 bg-zinc-950 px-4 py-3 text-sm text-zinc-300">
+                            Chargement...
+                        </div>
+                    </div>
+                </div>
+            }
+        >
+            <RegisterPageInner />
+        </Suspense>
+    );
+}
+
+function RegisterPageInner() {
     const router = useRouter();
     const search = useSearchParams();
     const { setToken, refresh } = useAuth();

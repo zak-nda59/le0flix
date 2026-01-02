@@ -2,7 +2,7 @@
 
 import Hls from "hls.js";
 import { useRouter, useSearchParams } from "next/navigation";
-import { use, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, use, useEffect, useMemo, useRef, useState } from "react";
 import { Header } from "@/components/Header";
 import { useAuth } from "@/lib/auth";
 import { apiJson } from "@/lib/api";
@@ -11,6 +11,28 @@ import type { StreamSessionResponse } from "@/lib/types";
 const DEFAULT_QUALITY = "1080p";
 
 export default function WatchMoviePage({ params }: { params: Promise<{ movieId: string }> }) {
+    return (
+        <Suspense
+            fallback={
+                <div className="min-h-screen bg-black text-white">
+                    <Header />
+                    <main className="mx-auto max-w-6xl px-6 pb-10 pt-8">
+                        <div className="flex items-center justify-between gap-4">
+                            <h1 className="text-lg font-semibold">Lecture</h1>
+                        </div>
+                        <div className="mt-6 rounded-md border border-white/10 bg-zinc-950 px-4 py-3 text-sm text-zinc-300">
+                            Chargement...
+                        </div>
+                    </main>
+                </div>
+            }
+        >
+            <WatchMoviePageInner params={params} />
+        </Suspense>
+    );
+}
+
+function WatchMoviePageInner({ params }: { params: Promise<{ movieId: string }> }) {
     const router = useRouter();
     const search = useSearchParams();
     const { token } = useAuth();
