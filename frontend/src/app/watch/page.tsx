@@ -2,10 +2,30 @@
 
 import Hls from "hls.js";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Header } from "@/components/Header";
 
 export default function WatchPage() {
+    return (
+        <Suspense
+            fallback={
+                <div className="min-h-screen bg-black text-white">
+                    <Header />
+                    <main className="mx-auto max-w-6xl px-6 pb-10 pt-8">
+                        <h1 className="text-lg font-semibold">Lecture</h1>
+                        <div className="mt-6 rounded-md border border-white/10 bg-zinc-950 px-4 py-3 text-sm text-zinc-300">
+                            Chargement...
+                        </div>
+                    </main>
+                </div>
+            }
+        >
+            <WatchPageInner />
+        </Suspense>
+    );
+}
+
+function WatchPageInner() {
     const params = useSearchParams();
     const src = params.get("src");
 
