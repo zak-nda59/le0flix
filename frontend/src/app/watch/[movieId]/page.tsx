@@ -42,12 +42,14 @@ export default function WatchMoviePage({ params }: { params: Promise<{ movieId: 
             return;
         }
 
+        const authToken = t;
+
         async function run() {
             setLoading(true);
             try {
                 const res = await apiJson<StreamSessionResponse>("/stream/sessions", {
                     method: "POST",
-                    token: t,
+                    token: authToken,
                     body: JSON.stringify({ movieId, quality }),
                 });
                 setPlaybackUrl(res.playbackUrl);
